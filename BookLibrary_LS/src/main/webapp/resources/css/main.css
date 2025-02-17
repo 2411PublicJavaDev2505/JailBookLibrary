@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+main {
+	width:1000px;
+	margin: 5% auto;
+	display:flex;
+	flex-wrap: wrap;
+}
+
+
+.area1{
+	width:50%;
+}
+.area2{
+	width:50%;
+}
+.area3{
+	width:50%;
+}
+.area4{
+	width:50%;
+}

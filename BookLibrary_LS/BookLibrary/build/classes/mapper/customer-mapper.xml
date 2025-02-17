@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  
+  <mapper namespace="CustomerMapper">
+  	<resultMap type= "Customer" id="customerResultMap">
+  		<id property ="userId" column="USER_ID"/>
+  		<result property ="userNo" column="USER_NO"/>
+  		<result property ="userPw" column="USER_PW"/>
+  		<result property ="userName" column="USER_NAME"/>
+  		<result property ="userAge" column="USER_AGE"/>
+  		<result property ="addr" column="ADDR"/>
+  		<result property ="gender" column="GENDER"/>
+  		<result property ="enrollDate" column="ENROLL_DATE"/>
+  	
+  	</resultMap>
+  	<insert id="insertCustomer">
+        
+    INSERT INTO CUSTOMER (USER_NO, User_Id, USER_PW, user_Name, user_Age, Addr, Gender)
+    VALUES (CUSTOMER_SEQ.NEXTVAL, #{userId}, #{userPw}, #{userName}, #{userAge}, #{addr}, #{gender})
+</insert>
+  	 	
+  	<update id="updateNotice">
+		UPDATE CUSTOMER
+        SET USER_PW = #{userPw}, user_Name = #{userName}, user_Age = #{userAge}, Addr = #{addr}, Gender = #{gender}
+        WHERE User_Id = #{userId}
+	</update>
+	
+	<delete id="deleteCustomer">
+		DELETE FROM CUSTOMER WHERE USER_ID = #{userId }
+	</delete>
+	
+	<select id="getTotalCount" resultMap="customerResultMap" >
+		SELECT COUNT(*) FROM CUSTOMER
+	</select>
+	
+	<select id="selectList" resultMap="customerResultMap" parameterType="map" >
+         SELECT * FROM (
+        SELECT A.*, ROW_NUMBER() OVER (ORDER BY USER_ID DESC) AS RNUM
+        FROM CUSTOMER A
+    ) WHERE RNUM BETWEEN #{startRow} AND #{endRow}
+    </select>
+    
+	<select id="selectOneById" resultMap="customerResultMap">
+		SELECT * FROM CUSTOMER WHERE USER_ID = #{userId}
+	</select>
+	<select id="selectSearchList" resultMap="customerResultMap">
+		SELECT * FROM CUSTOMER
+		<where>
+			<if test="searchCondition == 'userId'">
+				USER_ID LIKE '%'||#{searchKeyword}||'%'
+			</if>
+			<if test="searchCondition == 'userName'">
+				USER_NAME LIKE '%'||#{searchKeyword}||'%'
+			</if>
+			
+		</where>
+		ORDER BY USER_ID DESC
+	</select>
+  </mapper>
