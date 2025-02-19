@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BookMapper">
+	
+	<resultMap type="Book" id="BookResultMap">
+		<id property ="bookNo" column="BOOK_NO"/>
+		<result property ="bookName" column="BOOK_NAME"/>
+		<result property ="bookWrite" column="BOOK_WRITER"/>
+		<result property ="bookPrice" column="BOOK_PRICE"/>
+		<result property ="publisher" column="PUBLISHER"/>
+		<result property ="genre" column="GENRE"/>
+	
+	</resultMap>
+	<select id="selectList" resultMap="BookResultMap">
+		SELECT * FROM BOOK ORDER BY BOOK_NO DESC 
+	</select>
+	
+	<select id="selectOneByNo" resultMap="BookResultMap">
+		SELECT * FROM BOOK WHERE BOOK_NO = #{BOOK_NO}
+	</select><insert id="insertBook">
+		INSERT INTO BOOK VALUES(SEQ_BOOK_NO.NEXTVAL,#{bookName},#{bookWrite},#{bookPrice},#{publisher},#{genre})
+	</insert>
+	
+	<select id="selectSearchList" resultMap="BookResultMap">
+		SELECT * FROM BOOK 
+		<where>
+			 <if test="searchCondition == 'bookNo'">
+			 	BOOK_NO LIKE '%'||#{searchKeyword}||'%'
+			  </if>
+			 <if test="searchCondition == 'bookName'">
+			 	BOOK_NAME LIKE '%'||#{searchKeyword}||'%'
+			  </if>
+		</where> 
+		ORDER BY BOOK_NO DESC
+	</select>	
+		
+	
+	<update id="updateBook">
+		UPDATE BOOK SET BOOK_NAME = #{bookName},BOOK_WRITER = #{bookWrite}, BOOK_PRICE = #{bookPrice}, PUBLISHER = #{publisher}, GENRE= #{genre} WHERE BOOK_NO = #{bookNo}
+	</update>
+	
+	<delete id="deleteBook">
+		DELETE FROM BOOK WHERE BOOK_NO=#{bookNo}
+	</delete>
+	
+	<select id="getTotalCount" resultType="_int">
+		 SELECT COUNT(*) FROM BOOK
+	</select>
+	
+</mapper>
